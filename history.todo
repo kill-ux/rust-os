@@ -1,0 +1,91 @@
+cargo build --target x86_64-blog_os.json
+ 1604  cargo build 
+ 1605  gaa
+ 1606  gc -m "print hello but still need to link it with bootloader for making image"
+ 1607  gp
+ 1608  cd ..
+ 1609  cargo install bootimage
+ 1610  ls
+ 1611  rustup component add llvm-tools-preview
+ 1612  cd -
+ 1613  cargo bootimage
+ 1614  rustup toolchain install nightly
+ 1615  rustup component add llvm-tools-preview --toolchain nightly-x86_64-unknown-linux-gnu
+ 1616  rustup component list --toolchain nightly | grep llvm
+ 1617  which llvm-objcopy
+ 1618  # Run this once\nmkdir -p ~/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin\n\nln -s llvm-objcopy \\n     ~/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/llvm-tools-preview
+ 1619  cargo bootimage
+ 1620  rustup run nightly which llvm-tools-preview
+ 1621  rustup run nightly llvm-tools-preview --version
+ 1622  ls
+ 1623  cd target
+ 1624  ls
+ 1625  cd x86_64-blog_os
+ 1626  ls
+ 1627  cd debug
+ 1628  ls
+ 1629  qemu-system-x86_64
+ 1630  wget https://download.qemu.org/qemu-9.2.0-x86_64.AppImage\n# or any newer version from https://www.qemu.org/download/\#linux
+ 1631  cd ~\nwget https://github.com/lucasmz1/Qemu-AppImage/releases/download/latest/QEMU-x86_64.AppImage\nchmod +x QEMU-x86_64.AppImage\n~/QEMU-x86_64.AppImage --version
+ 1632  wget https://github.com/multiarch/qemu-user-static/releases/download/latest/qemu-x86_64-static
+ 1633  clear
+ 1634  wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+ 1635  bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda3
+ 1636  echo 'export PATH="$HOME/miniconda3/bin:$PATH"' >> ~/.bashrc
+ 1637  echo 'export PATH="$HOME/miniconda3/bin:$PATH"' >> ~/.zshrc
+ 1638  source ~/.bashrc
+ 1639  s
+ 1640  echo 'export PATH="$HOME/miniconda3/bin:$PATH"' >> ~/.zshrc
+ 1641  source ~/.zshrc
+ 1642  conda
+ 1643  conda install -c conda-forge qemu
+ 1644  conda search qemu
+ 1645  mkdir -p $HOME/opt $HOME/src\ncd $HOME/src\n
+ 1646  wget https://download.qemu.org/qemu-8.2.2.tar.xz
+ 1647  tar xf qemu-8.2.2.tar.xz\n
+ 1648  cd qemu-8.2.2
+ 1649  ./configure --prefix=$HOME/opt/qemu --target-list=x86_64-softmmu
+ 1650  pip install distlib
+ 1651  conda install -c conda-forge distlib
+ 1652  cd $HOME/src/qemu-8.2.2\n\n# Clean any previous attempts\nrm -rf build\n\n# Try with minimal configuration to avoid Python dependency issues\n./configure --prefix=$HOME/opt/qemu \\n  --target-list=x86_64-softmmu \\n  --disable-docs \\n  --disable-gtk \\n  --disable-vte \\n  --disable-sdl \\n  --disable-curses
+ 1653  # Create a virtual environment with the required dependencies\npython -m venv $HOME/qemu-venv\nsource $HOME/qemu-venv/bin/activate\n\n# Install required Python packages\npip install distlib meson ninja\n\n# Now try configure again\n./configure --prefix=$HOME/opt/qemu --target-list=x86_64-softmmu
+ 1654  make -j4
+ 1655  make install
+ 1656  echo 'export PATH="$HOME/opt/qemu/bin:$PATH"' >> ~/.zshrc
+ 1657  source ~/.zshrc
+ 1658  qemu-system-x86_64 --version
+ 1659  clear
+ 1660  which qemu-system-x86_64
+ 1661  qemu-system-x86_64 -help | head -20
+ 1662  qemu-system-x86_64
+ 1663  cd
+ 1664  qemu-system-x86_64
+ 1665  cd my-os
+ 1666  ls
+ 1667  pwd
+ 1668  ls
+ 1669  pwd target
+ 1670  cd target
+ 1671  ls
+ 1672  cd x86_64-blog_os
+ 1673  ls
+ 1674  cd debug
+ 1675  ls
+ 1676  pwd
+ 1677  cd ../../..
+ 1678  qemu-system-x86_64 -drive format=raw,file=/target/x86_64-blog_os/debug/bootimage-my-os.bin
+ 1679  qemu-system-x86_64 -drive format=raw,file=target/x86_64-blog_os/debug/bootimage-my-os.bin
+ 1680  gaa
+ 1681  gc -m "now Hello world in qemu"
+ 1682  gp
+ 1683  cd ..
+ 1684  cargo run
+ 1685  qemu-system-x86_64 -drive format=raw,file=target/x86_64-blog_os/debug/bootimage-my-os.bin
+ 1686  source ~/.zshrc
+ 1687  cargo run
+ 1688  gaa
+ 1689  gc -m "make cargo run boot ourloader with our os and run it with qemu"
+ 1690  gp
+ 1691  qemu-img
+ 1692  qemu-img convert -f raw -O vdi \\n    target/x86_64-blog_os/debug/bootimage-my-os.bin \\n    my-os.vdi
+ 1693* qemu-system-x86_64 -drive format=raw,file=target/x86_64-blog_os/debug/bootimage-my-os.bin
